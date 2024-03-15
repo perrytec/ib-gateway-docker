@@ -2,16 +2,29 @@ version: "3.4"
 
 services:
   ib-gateway:
+    container_name: ib-gateway
     restart: always
     build:
-      context: ./latest
+      context: ./stable
     environment:
       TWS_USERID: ${TWS_USERID}
       TWS_PASSWORD: ${TWS_PASSWORD}
       TRADING_MODE: ${TRADING_MODE:-paper}
       READ_ONLY_API: ${READ_ONLY_API:-}
       VNC_SERVER_PASSWORD: ${VNC_SERVER_PASSWORD:-}
+    network_mode: host
     ports:
-      - "127.0.0.1:4001:4001"
-      - "127.0.0.1:4002:4002"
-      - "127.0.0.1:5900:5900"
+      - "4001:4001"
+      - "4002:4002"
+      - "5900:5900"
+
+  tws-connect:
+    container_name: tws-connect
+    restart: always
+    build:
+      context: ./tws-connect
+    network_mode: host
+    ports:
+      - "5555:5555"
+      - "5556:5556"
+      - "5557:5557"
